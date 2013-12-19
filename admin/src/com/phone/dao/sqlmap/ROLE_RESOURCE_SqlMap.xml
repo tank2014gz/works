@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="com.phone.entity.RoleResource" >
+
+  <typeAlias alias="RoleResource" type="com.phone.entity.RoleResource" />
+
+  <resultMap id="baseResultMap" class="RoleResource" >
+    <result column="RESOURCE_ID" property="resourceId" jdbcType="VARCHAR" />
+    <result column="ROLE_ID" property="roleId" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="queryConditions" >
+    <dynamic prepend="where" >
+      <isPropertyAvailable prepend="and" property="resourceId" >
+        RESOURCE_ID = #resourceId:VARCHAR#
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="resourceId_like" >
+        RESOURCE_ID like '%'|| #resourceId_like:VARCHAR#||'%'
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="roleId" >
+        ROLE_ID = #roleId:VARCHAR#
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="roleId_like" >
+        ROLE_ID like '%'|| #roleId_like:VARCHAR#||'%'
+      </isPropertyAvailable>
+    </dynamic>
+    <dynamic prepend="order by" >
+      <isPropertyAvailable prepend="," property="orderByResourceId" >
+        RESOURCE_ID $orderByResourceId$
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="," property="orderByRoleId" >
+        ROLE_ID $orderByRoleId$
+      </isPropertyAvailable>
+    </dynamic>
+  </sql>
+
+  <select id="selectByExample" resultMap="baseResultMap" parameterClass="java.util.Map" >
+    select RESOURCE_ID, ROLE_ID
+    from role_resource
+    <isParameterPresent >
+      <include refid="queryConditions" />
+    </isParameterPresent>
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterClass="RoleResource" >
+    delete from role_resource
+    where RESOURCE_ID = #resourceId:VARCHAR#
+      and ROLE_ID = #roleId:VARCHAR#
+  </delete>
+
+  <delete id="deleteByExample" parameterClass="java.util.Map" >
+    delete from role_resource
+    <include refid="queryConditions" />
+  </delete>
+
+  <insert id="insert" parameterClass="RoleResource" >
+    insert into role_resource (RESOURCE_ID, ROLE_ID)
+    values (#resourceId:VARCHAR#, #roleId:VARCHAR#)
+  </insert>
+
+  <insert id="insertSelective" parameterClass="RoleResource" >
+    insert into role_resource
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="resourceId" >
+        RESOURCE_ID
+      </isNotNull>
+      <isNotNull prepend="," property="roleId" >
+        ROLE_ID
+      </isNotNull>
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="resourceId" >
+        #resourceId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="roleId" >
+        #roleId:VARCHAR#
+      </isNotNull>
+      )
+    </dynamic>
+  </insert>
+
+  <select id="countByExample" parameterClass="java.util.Map" resultClass="java.lang.Integer" >
+    select count(*) from role_resource
+    <include refid="queryConditions" />
+  </select>
+
+  <update id="updateByExampleSelective" parameterClass="java.util.Map" >
+    update role_resource
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="resourceId" >
+        RESOURCE_ID = #resourceId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="roleId" >
+        ROLE_ID = #roleId:VARCHAR#
+      </isNotNull>
+    </dynamic>
+    <isParameterPresent >
+      <include refid="queryConditions" />
+    </isParameterPresent>
+  </update>
+
+  <update id="updateByExample" parameterClass="java.util.Map" >
+    update role_resource
+    set RESOURCE_ID = #resourceId:VARCHAR#,
+      ROLE_ID = #roleId:VARCHAR#
+    <isParameterPresent >
+      <include refid="queryConditions" />
+    </isParameterPresent>
+  </update>
+</sqlMap>

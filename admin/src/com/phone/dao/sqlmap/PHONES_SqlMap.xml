@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="com.phone.entity.Phone" >
+
+  <typeAlias alias="Phone" type="com.phone.entity.Phone" />
+
+  <resultMap id="baseResultMap" class="Phone" >
+    <result column="PHONE" property="phone" jdbcType="VARCHAR" />
+    <result column="USER_ID" property="userId" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="SMALLINT" />
+    <result column="CATEGORY_ID" property="categoryId" jdbcType="INTEGER" />
+    <result column="COST_PRICE" property="costPrice" jdbcType="DECIMAL" />
+    <result column="SELL_PRICE" property="sellPrice" jdbcType="DECIMAL" />
+    <result column="PRICE_MARK" property="priceMark" jdbcType="VARCHAR" />
+    <result column="MEMO" property="memo" jdbcType="VARCHAR" />
+    <result column="CRETAE_TIME" property="cretaeTime" jdbcType="TIMESTAMP" />
+    <result column="MODIFY_TIME" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <sql id="queryConditions" >
+    <dynamic prepend="where" >
+      <isPropertyAvailable prepend="and" property="phone" >
+        PHONE = #phone:VARCHAR#
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="phone_like" >
+        PHONE like '%'|| #phone_like:VARCHAR#||'%'
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="userId" >
+        USER_ID = #userId:VARCHAR#
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="userId_like" >
+        USER_ID like '%'|| #userId_like:VARCHAR#||'%'
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="status" >
+        STATUS = #status:SMALLINT#
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="categoryId" >
+        CATEGORY_ID = #categoryId:INTEGER#
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="costPrice" >
+        COST_PRICE = #costPrice:DECIMAL#
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="sellPrice" >
+        SELL_PRICE = #sellPrice:DECIMAL#
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="priceMark" >
+        PRICE_MARK = #priceMark:VARCHAR#
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="priceMark_like" >
+        PRICE_MARK like '%'|| #priceMark_like:VARCHAR#||'%'
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="memo" >
+        MEMO = #memo:VARCHAR#
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="memo_like" >
+        MEMO like '%'|| #memo_like:VARCHAR#||'%'
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="cretaeTime" >
+        CRETAE_TIME = #cretaeTime:TIMESTAMP#
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="modifyTime" >
+        MODIFY_TIME = #modifyTime:TIMESTAMP#
+      </isPropertyAvailable>
+    </dynamic>
+    <dynamic prepend="order by" >
+      <isPropertyAvailable prepend="," property="orderByPhone" >
+        PHONE $orderByPhone$
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="," property="orderByUserId" >
+        USER_ID $orderByUserId$
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="," property="orderByStatus" >
+        STATUS $orderByStatus$
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="," property="orderByCategoryId" >
+        CATEGORY_ID $orderByCategoryId$
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="," property="orderByCostPrice" >
+        COST_PRICE $orderByCostPrice$
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="," property="orderBySellPrice" >
+        SELL_PRICE $orderBySellPrice$
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="," property="orderByPriceMark" >
+        PRICE_MARK $orderByPriceMark$
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="," property="orderByMemo" >
+        MEMO $orderByMemo$
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="," property="orderByCretaeTime" >
+        CRETAE_TIME $orderByCretaeTime$
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="," property="orderByModifyTime" >
+        MODIFY_TIME $orderByModifyTime$
+      </isPropertyAvailable>
+    </dynamic>
+  </sql>
+
+  <select id="selectByExample" resultMap="baseResultMap" parameterClass="java.util.Map" >
+    select PHONE, USER_ID, STATUS, CATEGORY_ID, COST_PRICE, SELL_PRICE, PRICE_MARK, MEMO,
+      CRETAE_TIME, MODIFY_TIME
+    from phones
+    <isParameterPresent >
+      <include refid="queryConditions" />
+    </isParameterPresent>
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="baseResultMap" parameterClass="Phone" >
+    select PHONE, USER_ID, STATUS, CATEGORY_ID, COST_PRICE, SELL_PRICE, PRICE_MARK, MEMO,
+      CRETAE_TIME, MODIFY_TIME
+    from phones
+    where PHONE = #phone:VARCHAR#
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterClass="Phone" >
+    delete from phones
+    where PHONE = #phone:VARCHAR#
+  </delete>
+
+  <delete id="deleteByExample" parameterClass="java.util.Map" >
+    delete from phones
+    <include refid="queryConditions" />
+  </delete>
+
+  <insert id="insert" parameterClass="Phone" >
+    insert into phones (PHONE, USER_ID, STATUS, CATEGORY_ID, COST_PRICE, SELL_PRICE, PRICE_MARK,
+      MEMO, CRETAE_TIME, MODIFY_TIME)
+    values (#phone:VARCHAR#, #userId:VARCHAR#, #status:SMALLINT#, #categoryId:INTEGER#,
+      #costPrice:DECIMAL#, #sellPrice:DECIMAL#, #priceMark:VARCHAR#, #memo:VARCHAR#,
+      #cretaeTime:TIMESTAMP#, #modifyTime:TIMESTAMP#)
+  </insert>
+
+  <insert id="insertSelective" parameterClass="Phone" >
+    insert into phones
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="phone" >
+        PHONE
+      </isNotNull>
+      <isNotNull prepend="," property="userId" >
+        USER_ID
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        STATUS
+      </isNotNull>
+      <isNotNull prepend="," property="categoryId" >
+        CATEGORY_ID
+      </isNotNull>
+      <isNotNull prepend="," property="costPrice" >
+        COST_PRICE
+      </isNotNull>
+      <isNotNull prepend="," property="sellPrice" >
+        SELL_PRICE
+      </isNotNull>
+      <isNotNull prepend="," property="priceMark" >
+        PRICE_MARK
+      </isNotNull>
+      <isNotNull prepend="," property="memo" >
+        MEMO
+      </isNotNull>
+      <isNotNull prepend="," property="cretaeTime" >
+        CRETAE_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="modifyTime" >
+        MODIFY_TIME
+      </isNotNull>
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="phone" >
+        #phone:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="userId" >
+        #userId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        #status:SMALLINT#
+      </isNotNull>
+      <isNotNull prepend="," property="categoryId" >
+        #categoryId:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="costPrice" >
+        #costPrice:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="sellPrice" >
+        #sellPrice:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="priceMark" >
+        #priceMark:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="memo" >
+        #memo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="cretaeTime" >
+        #cretaeTime:TIMESTAMP#
+      </isNotNull>
+      <isNotNull prepend="," property="modifyTime" >
+        #modifyTime:TIMESTAMP#
+      </isNotNull>
+      )
+    </dynamic>
+  </insert>
+
+  <select id="countByExample" parameterClass="java.util.Map" resultClass="java.lang.Integer" >
+    select count(*) from phones
+    <include refid="queryConditions" />
+  </select>
+
+  <update id="updateByExampleSelective" parameterClass="java.util.Map" >
+    update phones
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="phone" >
+        PHONE = #phone:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="userId" >
+        USER_ID = #userId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        STATUS = #status:SMALLINT#
+      </isNotNull>
+      <isNotNull prepend="," property="categoryId" >
+        CATEGORY_ID = #categoryId:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="costPrice" >
+        COST_PRICE = #costPrice:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="sellPrice" >
+        SELL_PRICE = #sellPrice:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="priceMark" >
+        PRICE_MARK = #priceMark:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="memo" >
+        MEMO = #memo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="cretaeTime" >
+        CRETAE_TIME = #cretaeTime:TIMESTAMP#
+      </isNotNull>
+      <isNotNull prepend="," property="modifyTime" >
+        MODIFY_TIME = #modifyTime:TIMESTAMP#
+      </isNotNull>
+    </dynamic>
+    <isParameterPresent >
+      <include refid="queryConditions" />
+    </isParameterPresent>
+  </update>
+
+  <update id="updateByExample" parameterClass="java.util.Map" >
+    update phones
+    set PHONE = #phone:VARCHAR#,
+      USER_ID = #userId:VARCHAR#,
+      STATUS = #status:SMALLINT#,
+      CATEGORY_ID = #categoryId:INTEGER#,
+      COST_PRICE = #costPrice:DECIMAL#,
+      SELL_PRICE = #sellPrice:DECIMAL#,
+      PRICE_MARK = #priceMark:VARCHAR#,
+      MEMO = #memo:VARCHAR#,
+      CRETAE_TIME = #cretaeTime:TIMESTAMP#,
+      MODIFY_TIME = #modifyTime:TIMESTAMP#
+    <isParameterPresent >
+      <include refid="queryConditions" />
+    </isParameterPresent>
+  </update>
+
+  <update id="updateByPrimaryKeySelective" parameterClass="Phone" >
+    update phones
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="userId" >
+        USER_ID = #userId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        STATUS = #status:SMALLINT#
+      </isNotNull>
+      <isNotNull prepend="," property="categoryId" >
+        CATEGORY_ID = #categoryId:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="costPrice" >
+        COST_PRICE = #costPrice:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="sellPrice" >
+        SELL_PRICE = #sellPrice:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="priceMark" >
+        PRICE_MARK = #priceMark:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="memo" >
+        MEMO = #memo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="cretaeTime" >
+        CRETAE_TIME = #cretaeTime:TIMESTAMP#
+      </isNotNull>
+      <isNotNull prepend="," property="modifyTime" >
+        MODIFY_TIME = #modifyTime:TIMESTAMP#
+      </isNotNull>
+    </dynamic>
+    where PHONE = #phone:VARCHAR#
+  </update>
+
+  <update id="updateByPrimaryKey" parameterClass="Phone" >
+    update phones
+    set USER_ID = #userId:VARCHAR#,
+      STATUS = #status:SMALLINT#,
+      CATEGORY_ID = #categoryId:INTEGER#,
+      COST_PRICE = #costPrice:DECIMAL#,
+      SELL_PRICE = #sellPrice:DECIMAL#,
+      PRICE_MARK = #priceMark:VARCHAR#,
+      MEMO = #memo:VARCHAR#,
+      CRETAE_TIME = #cretaeTime:TIMESTAMP#,
+      MODIFY_TIME = #modifyTime:TIMESTAMP#
+    where PHONE = #phone:VARCHAR#
+  </update>
+</sqlMap>

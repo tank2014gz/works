@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.2.xsd
+    http://www.springframework.org/schema/security
+    http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+	<context:component-scan base-package="com.phone" />
+
+	<!-- 自定义SPRING SECURITY过滤链 -->
+	<bean id="springSecurityFilterChain" class="org.springframework.security.web.FilterChainProxy">
+		<constructor-arg>
+			<list>
+				<security:filter-chain pattern="/services/**"
+					filters="none" />
+				<security:filter-chain pattern="/css/**"
+					filters="none" />
+				<security:filter-chain pattern="*.html"
+					filters="none" />
+				<security:filter-chain pattern="/images/**"
+					filters="none" />
+				<security:filter-chain pattern="/js/**"
+					filters="none" />
+				<security:filter-chain pattern="/login.jsp**" 
+					filters="none" />
+				<security:filter-chain pattern="/**"
+					filters="channelProcessingFilter,concurrentSessionFilter,securityContextPersistenceFilter,logoutFilter,usernamePasswordAuthenticationFilter,rememberMeAuthenticationFilter,sessionManagementFilter,exceptionTranslationFilter,filterSecurityInterceptor" />
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<!-- 自动记忆过滤器-->
+	<bean id="rememberMeAuthenticationFilter"
+		class="org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter">
+		<property name="rememberMeServices" ref="rememberMeServices"></property>
+		<property name="authenticationManager" ref="myAuthenticationManager"></property>
+	</bean>
+
+	<bean id="persistentTokenRepository"
+		class="org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="rememberMeServices"
+		class="org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices">
+		<property name="parameter" value="remember" />
+		<property name="userDetailsService" ref="customerUserDetailsService" />
+		<property name="tokenValiditySeconds" value="1209600" />
+		<property name="key" value="myRemberMeKey" />
+		<property name="tokenRepository" ref="persistentTokenRepository" />
+	</bean>
+
+	<!-- 注销过滤器 -->
+	<bean id="logoutFilter"
+		class="org.springframework.security.web.authentication.logout.LogoutFilter">
+		<constructor-arg value="/login.jsp" />
+		<constructor-arg>
+			<array>
+				<ref bean="logoutHandler" />
+				<ref bean="rememberMeServices" />
+			</array>
+		</constructor-arg>
+		<property name="filterProcessesUrl" value="/logout" />
+	</bean>
+
+	<!-- 注销监听器  -->
+	<bean id="logoutHandler"
+		class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler">
+	</bean>
+
+	<bean id="rememberMeAuthenticationProvider"
+		class="org.springframework.security.authentication.RememberMeAuthenticationProvider">
+		<property name="key" value="myRemberMeKey" />
+	</bean>
+
+	<bean id="usernamePasswordAuthenticationFilter"
+		class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
+		<property name="authenticationManager" ref="myAuthenticationManager" />
+		<property name="rememberMeServices" ref="rememberMeServices" />
+		<property name="postOnly" value="true" />
+		<property name="usernameParameter" value="name" />
+		<property name="passwordParameter" value="pwd" />
+		<property name="filterProcessesUrl" value="/login"></property>
+		<property name="sessionAuthenticationStrategy" ref="concurrentSessionControlStrategy"></property>
+		<property name="authenticationFailureHandler" ref="authenticationFailureHandler" />
+		<property name="messageSource" ref="messageSource" />
+		<property name="authenticationSuccessHandler" ref="authenticationSuccessHandler"/>
+	</bean>
+	
+	<bean id="authenticationSuccessHandler" class="com.phone.system.LoginAuthenticationSuccessHandler" />
+
+	<bean id="authenticationFailureHandler"
+		class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+		<property name="defaultFailureUrl" value="/login.jsp" />
+		<property name="useForward" value="false" />
+	</bean>
+
+
+	<!-- 持久化SecurityContext过滤器 -->
+	<bean id="securityContextPersistenceFilter"
+		class="org.springframework.security.web.context.SecurityContextPersistenceFilter">
+		<property name="securityContextRepository" ref="securityContextRepository" />
+	</bean>
+
+	<!-- 生成HttpSessionSecurityContextRepository -->
+	<bean id="securityContextRepository"
+		class="org.springframework.security.web.context.HttpSessionSecurityContextRepository">
+		<property name="allowSessionCreation" value="true" />
+		<property name="disableUrlRewriting" value="true" />
+	</bean>
+
+	<bean id="authenticationEntryPoint"
+		class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+		<property name="loginFormUrl" value="/login.jsp"></property>
+		<property name="forceHttps" value="true"></property>
+		<property name="portMapper">
+		  <bean class="org.springframework.security.web.PortMapperImpl">
+		    <property name="portMappings">
+		      <map>
+		        <entry key="9999"  value="9443"></entry>
+		      </map>
+		    </property>
+		  </bean>
+		</property>
+	</bean>
+
+	<bean id="channelProcessingFilter"
+		class="org.springframework.security.web.access.channel.ChannelProcessingFilter">
+		<property name="channelDecisionManager" ref="channelDecisionManager" />
+		<property name="securityMetadataSource">
+			<security:filter-security-metadata-source
+				path-type="ant">
+				<security:intercept-url pattern="/login.jsp**"
+					access="REQUIRES_SECURE_CHANNEL" />
+				<security:intercept-url pattern="/**"
+					access="ANY_CHANNEL" />
+			</security:filter-security-metadata-source>
+		</property>
+	</bean>
+
+	<bean id="channelDecisionManager"
+		class="org.springframework.security.web.access.channel.ChannelDecisionManagerImpl">
+		<property name="channelProcessors">
+			<list>
+				<ref bean="secureChannelProcessor" />
+				<ref bean="insecureChannelProcessor" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="secureChannelProcessor"
+		class="org.springframework.security.web.access.channel.SecureChannelProcessor" />
+	<bean id="insecureChannelProcessor"
+		class="org.springframework.security.web.access.channel.InsecureChannelProcessor" />
+
+
+	<!-- 异常处理过滤器 -->
+	<bean id="exceptionTranslationFilter"
+		class="org.springframework.security.web.access.ExceptionTranslationFilter">
+		<property name="authenticationEntryPoint" ref="authenticationEntryPoint" />
+		<property name="accessDeniedHandler">
+			<!-- 拒绝未授权访问跳转 -->
+			<bean
+				class="org.springframework.security.web.access.AccessDeniedHandlerImpl">
+				<property name="errorPage" value="/error/audit.jsp" />
+			</bean>
+		</property>
+	</bean>
+
+	<!-- SESSION固化保护,以及并发控制 -->
+	<bean id="sessionManagementFilter"
+		class="org.springframework.security.web.session.SessionManagementFilter">
+		<constructor-arg name="securityContextRepository" ref="securityContextRepository" />
+		<property name="sessionAuthenticationStrategy" ref="concurrentSessionControlStrategy" />
+		<property name="invalidSessionStrategy" ref="invalidSessionStrategy"></property>
+
+	</bean>
+
+	<bean id="invalidSessionStrategy"
+		class="org.springframework.security.web.session.SimpleRedirectInvalidSessionStrategy">
+		<constructor-arg name="invalidSessionUrl" value="/login.jsp" />
+		<property name="createNewSession" value="false"></property>
+	</bean>
+
+	<!-- SESSION并发配置 -->
+	<bean id="concurrentSessionControlStrategy"
+		class="org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy">
+		<constructor-arg name="sessionRegistry" ref="sessionRegistry" />
+		<property name="maximumSessions" value="1" />
+		<property name="exceptionIfMaximumExceeded" value="true" />
+	</bean>
+
+	<bean id="sessionRegistry"
+		class="org.springframework.security.core.session.SessionRegistryImpl" />
+
+	<!-- SESSION并发处理 -->
+	<bean id="concurrentSessionFilter"
+		class="org.springframework.security.web.session.ConcurrentSessionFilter">
+		<property name="sessionRegistry" ref="sessionRegistry" />
+		<property name="expiredUrl" value="/error.jsp" />
+		<property name="logoutHandlers">
+			<list>
+				<ref bean="logoutHandler" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="filterSecurityInterceptor" class="com.phone.system.FilterSecurityInterceptor">
+		<property name="authenticationManager" ref="myAuthenticationManager" />
+		<!-- 访问决策器，决定某个用户具有的角色，是否有足够的权限去访问某个资源     -->
+		<property name="accessDecisionManager" ref="customerAccessDecisionManager" />
+		<property name="securityMetadataSource" ref="customerSecurityMetadataSourceService" />
+	</bean>
+
+	<bean id="customerSecurityMetadataSourceService" init-method="init"
+		class="com.phone.system.CustomerSecurityMetadataSourceService">
+	</bean>
+
+	<bean id="myAuthenticationManager"
+		class="org.springframework.security.authentication.ProviderManager">
+		<property name="providers">
+			<list>
+				<ref bean="rememberMeAuthenticationProvider" />
+				<ref bean="daoAuthenticationProvider" />
+			</list>
+		</property>
+		<property name="messageSource" ref="messageSource" />
+	</bean>
+
+	<bean id="daoAuthenticationProvider"
+		class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+		<property name="userDetailsService" ref="customerUserDetailsService" />
+		<property name="messageSource" ref="messageSource" />
+	</bean>
+
+	<bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basename" value="classpath:com/phone/i18n/message" />
+	</bean>
+
+	<bean id="localeResolver"
+		class="org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver" />
+
+</beans>

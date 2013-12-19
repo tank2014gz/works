@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+	<settings cacheModelsEnabled="false" enhancementEnabled="true"
+		lazyLoadingEnabled="true" errorTracingEnabled="true" maxSessions="64"
+		maxTransactions="8" maxRequests="10000" useStatementNamespaces="true" />
+
+	<sqlMap resource="com/phone/dao/sqlmap/USER_INFO_SqlMap.xml" />
+	<sqlMap resource="com/phone/dao/sqlmap/REQUEST_LOG_SqlMap.xml" />
+	<sqlMap resource="com/phone/dao/sqlmap/USER_ROLE_SqlMap.xml" />
+	<sqlMap resource="com/phone/dao/sqlmap/ROLE_SqlMap.xml" />
+	<sqlMap resource="com/phone/dao/sqlmap/ROLE_RESOURCE_SqlMap.xml" />
+	<sqlMap resource="com/phone/dao/sqlmap/RESOURCE_SqlMap.xml" />
+	<sqlMap resource="com/phone/dao/sqlmap/PHONES_SqlMap.xml" />
+	<sqlMap resource="com/phone/dao/sqlmap/PHONE_CATEGORY_SqlMap.xml" />
+
+</sqlMapConfig>

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="com.phone.entity.PhoneCategory" >
+
+  <typeAlias alias="PhoneCategory" type="com.phone.entity.PhoneCategory" />
+
+  <resultMap id="baseResultMap" class="PhoneCategory" >
+    <result column="CATEGORY_ID" property="categoryId" jdbcType="VARCHAR" />
+    <result column="CATEGORY_NAME" property="categoryName" jdbcType="VARCHAR" />
+    <result column="CATEGORY_DESC" property="categoryDesc" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="SMALLINT" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <sql id="queryConditions" >
+    <dynamic prepend="where" >
+      <isPropertyAvailable prepend="and" property="categoryId" >
+        CATEGORY_ID = #categoryId:VARCHAR#
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="categoryId_like" >
+        CATEGORY_ID like '%'|| #categoryId_like:VARCHAR#||'%'
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="categoryName" >
+        CATEGORY_NAME = #categoryName:VARCHAR#
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="categoryName_like" >
+        CATEGORY_NAME like '%'|| #categoryName_like:VARCHAR#||'%'
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="categoryDesc" >
+        CATEGORY_DESC = #categoryDesc:VARCHAR#
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="categoryDesc_like" >
+        CATEGORY_DESC like '%'|| #categoryDesc_like:VARCHAR#||'%'
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="status" >
+        STATUS = #status:SMALLINT#
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="createTime" >
+        CREATE_TIME = #createTime:TIMESTAMP#
+      </isPropertyAvailable>
+    </dynamic>
+    <dynamic prepend="order by" >
+      <isPropertyAvailable prepend="," property="orderByCategoryId" >
+        CATEGORY_ID $orderByCategoryId$
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="," property="orderByCategoryName" >
+        CATEGORY_NAME $orderByCategoryName$
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="," property="orderByCategoryDesc" >
+        CATEGORY_DESC $orderByCategoryDesc$
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="," property="orderByStatus" >
+        STATUS $orderByStatus$
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="," property="orderByCreateTime" >
+        CREATE_TIME $orderByCreateTime$
+      </isPropertyAvailable>
+    </dynamic>
+  </sql>
+
+  <select id="selectByExample" resultMap="baseResultMap" parameterClass="java.util.Map" >
+    select CATEGORY_ID, CATEGORY_NAME, CATEGORY_DESC, STATUS, CREATE_TIME
+    from phone_category
+    <isParameterPresent >
+      <include refid="queryConditions" />
+    </isParameterPresent>
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="baseResultMap" parameterClass="PhoneCategory" >
+    select CATEGORY_ID, CATEGORY_NAME, CATEGORY_DESC, STATUS, CREATE_TIME
+    from phone_category
+    where CATEGORY_ID = #categoryId:VARCHAR#
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterClass="PhoneCategory" >
+    delete from phone_category
+    where CATEGORY_ID = #categoryId:VARCHAR#
+  </delete>
+
+  <delete id="deleteByExample" parameterClass="java.util.Map" >
+    delete from phone_category
+    <include refid="queryConditions" />
+  </delete>
+
+  <insert id="insert" parameterClass="PhoneCategory" >
+    insert into phone_category (CATEGORY_ID, CATEGORY_NAME, CATEGORY_DESC, STATUS, CREATE_TIME)
+    values (#categoryId:VARCHAR#, #categoryName:VARCHAR#, #categoryDesc:VARCHAR#, #status:SMALLINT#,
+      #createTime:TIMESTAMP#)
+  </insert>
+
+  <insert id="insertSelective" parameterClass="PhoneCategory" >
+    insert into phone_category
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="categoryId" >
+        CATEGORY_ID
+      </isNotNull>
+      <isNotNull prepend="," property="categoryName" >
+        CATEGORY_NAME
+      </isNotNull>
+      <isNotNull prepend="," property="categoryDesc" >
+        CATEGORY_DESC
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        STATUS
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        CREATE_TIME
+      </isNotNull>
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="categoryId" >
+        #categoryId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="categoryName" >
+        #categoryName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="categoryDesc" >
+        #categoryDesc:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        #status:SMALLINT#
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        #createTime:TIMESTAMP#
+      </isNotNull>
+      )
+    </dynamic>
+  </insert>
+
+  <select id="countByExample" parameterClass="java.util.Map" resultClass="java.lang.Integer" >
+    select count(*) from phone_category
+    <include refid="queryConditions" />
+  </select>
+
+  <update id="updateByExampleSelective" parameterClass="java.util.Map" >
+    update phone_category
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="categoryId" >
+        CATEGORY_ID = #categoryId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="categoryName" >
+        CATEGORY_NAME = #categoryName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="categoryDesc" >
+        CATEGORY_DESC = #categoryDesc:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        STATUS = #status:SMALLINT#
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        CREATE_TIME = #createTime:TIMESTAMP#
+      </isNotNull>
+    </dynamic>
+    <isParameterPresent >
+      <include refid="queryConditions" />
+    </isParameterPresent>
+  </update>
+
+  <update id="updateByExample" parameterClass="java.util.Map" >
+    update phone_category
+    set CATEGORY_ID = #categoryId:VARCHAR#,
+      CATEGORY_NAME = #categoryName:VARCHAR#,
+      CATEGORY_DESC = #categoryDesc:VARCHAR#,
+      STATUS = #status:SMALLINT#,
+      CREATE_TIME = #createTime:TIMESTAMP#
+    <isParameterPresent >
+      <include refid="queryConditions" />
+    </isParameterPresent>
+  </update>
+
+  <update id="updateByPrimaryKeySelective" parameterClass="PhoneCategory" >
+    update phone_category
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="categoryName" >
+        CATEGORY_NAME = #categoryName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="categoryDesc" >
+        CATEGORY_DESC = #categoryDesc:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        STATUS = #status:SMALLINT#
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        CREATE_TIME = #createTime:TIMESTAMP#
+      </isNotNull>
+    </dynamic>
+    where CATEGORY_ID = #categoryId:VARCHAR#
+  </update>
+
+  <update id="updateByPrimaryKey" parameterClass="PhoneCategory" >
+    update phone_category
+    set CATEGORY_NAME = #categoryName:VARCHAR#,
+      CATEGORY_DESC = #categoryDesc:VARCHAR#,
+      STATUS = #status:SMALLINT#,
+      CREATE_TIME = #createTime:TIMESTAMP#
+    where CATEGORY_ID = #categoryId:VARCHAR#
+  </update>
+</sqlMap>

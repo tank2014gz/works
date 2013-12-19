@@ -1,0 +1,119 @@
+/*
+Navicat MySQL Data Transfer
+
+Source Server         : local
+Source Server Version : 50534
+Source Host           : localhost:3306
+Source Database       : phone
+
+Target Server Type    : MYSQL
+Target Server Version : 50534
+File Encoding         : 65001
+
+Date: 2013-11-23 22:31:11
+*/
+
+SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for phones
+-- ----------------------------
+DROP TABLE IF EXISTS `phones`;
+CREATE TABLE `phones` (
+  `PHONE` varchar(15) NOT NULL,
+  `USER_ID` varchar(100) DEFAULT NULL,
+  `STATUS` smallint(6) DEFAULT NULL,
+  `CATEGORY_ID` varchar(100) DEFAULT NULL,
+  `COST_PRICE` decimal(10,2) DEFAULT NULL,
+  `SELL_PRICE` decimal(10,2) DEFAULT NULL,
+  `MEMO` varchar(2000) DEFAULT NULL,
+  `CRETAE_TIME` datetime DEFAULT NULL,
+  `MODIFY_TIME` datetime DEFAULT NULL,
+  PRIMARY KEY (`PHONE`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for phone_category
+-- ----------------------------
+DROP TABLE IF EXISTS `phone_category`;
+CREATE TABLE `phone_category` (
+  `CATEGORY_ID` varchar(100) NOT NULL,
+  `CATEGORY_NAME` varchar(500) DEFAULT NULL,
+  `CATEGORY_DESC` varchar(2000) DEFAULT NULL,
+  `CREATE_TIME` datetime DEFAULT NULL,
+  `STATUS` smallint(2) DEFAULT NULL,
+  PRIMARY KEY (`CATEGORY_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for request_log
+-- ----------------------------
+DROP TABLE IF EXISTS `request_log`;
+CREATE TABLE `request_log` (
+  `ID` varchar(100) NOT NULL,
+  `REQUEST_CLASS` varchar(300) DEFAULT NULL,
+  `REQUEST_METHOD` varchar(100) DEFAULT NULL,
+  `REQUEST_ARGS` varchar(2000) DEFAULT NULL,
+  `DEAL_TIME` bigint(15) DEFAULT NULL,
+  `REQUEST_TIME` datetime DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for resource
+-- ----------------------------
+DROP TABLE IF EXISTS `resource`;
+CREATE TABLE `resource` (
+  `RESOURCE_ID` varchar(100) NOT NULL,
+  `RRSOURCE_NAME` varchar(500) DEFAULT NULL,
+  `RESOURCE_URL` varchar(500) DEFAULT NULL,
+  `STATUS` smallint(2) DEFAULT NULL,
+  `PRIORITY` bigint(5) DEFAULT NULL,
+  PRIMARY KEY (`RESOURCE_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for role
+-- ----------------------------
+DROP TABLE IF EXISTS `role`;
+CREATE TABLE `role` (
+  `ROLE_ID` varchar(100) NOT NULL,
+  `ROLE_NAME` varchar(200) DEFAULT NULL,
+  `ROLE_DESC` varchar(500) DEFAULT NULL,
+  `STATUS` smallint(2) DEFAULT NULL,
+  PRIMARY KEY (`ROLE_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for role_resource
+-- ----------------------------
+DROP TABLE IF EXISTS `role_resource`;
+CREATE TABLE `role_resource` (
+  `RESOURCE_ID` varchar(100) NOT NULL,
+  `ROLE_ID` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for user_info
+-- ----------------------------
+DROP TABLE IF EXISTS `user_info`;
+CREATE TABLE `user_info` (
+  `USER_ID` varchar(100) NOT NULL,
+  `USER_NAME` varchar(100) DEFAULT NULL,
+  `PASSWORD` varchar(100) DEFAULT NULL,
+  `STATUS` smallint(2) DEFAULT NULL,
+  `TYPE` smallint(2) DEFAULT NULL,
+  `CREATE_TIME` datetime DEFAULT NULL,
+  `MODIFY_TIME` datetime DEFAULT NULL,
+  `IS_ADMIN` smallint(2) DEFAULT NULL,
+  PRIMARY KEY (`USER_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for user_role
+-- ----------------------------
+DROP TABLE IF EXISTS `user_role`;
+CREATE TABLE `user_role` (
+  `ROLE_ID` varchar(100) NOT NULL,
+  `USER_ID` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

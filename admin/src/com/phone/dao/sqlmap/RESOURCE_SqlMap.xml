@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="com.phone.entity.Resource" >
+
+  <typeAlias alias="Resource" type="com.phone.entity.Resource" />
+
+  <resultMap id="baseResultMap" class="Resource" >
+    <result column="RESOURCE_ID" property="resourceId" jdbcType="VARCHAR" />
+    <result column="RRSOURCE_NAME" property="rrsourceName" jdbcType="VARCHAR" />
+    <result column="RESOURCE_URL" property="resourceUrl" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="SMALLINT" />
+    <result column="PRIORITY" property="priority" jdbcType="INTEGER" />
+  </resultMap>
+
+  <sql id="queryConditions" >
+    <dynamic prepend="where" >
+      <isPropertyAvailable prepend="and" property="resourceId" >
+        RESOURCE_ID = #resourceId:VARCHAR#
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="resourceId_like" >
+        RESOURCE_ID like '%'|| #resourceId_like:VARCHAR#||'%'
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="rrsourceName" >
+        RRSOURCE_NAME = #rrsourceName:VARCHAR#
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="rrsourceName_like" >
+        RRSOURCE_NAME like '%'|| #rrsourceName_like:VARCHAR#||'%'
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="resourceUrl" >
+        RESOURCE_URL = #resourceUrl:VARCHAR#
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="resourceUrl_like" >
+        RESOURCE_URL like '%'|| #resourceUrl_like:VARCHAR#||'%'
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="status" >
+        STATUS = #status:SMALLINT#
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="priority" >
+        PRIORITY = #priority:INTEGER#
+      </isPropertyAvailable>
+    </dynamic>
+    <dynamic prepend="order by" >
+      <isPropertyAvailable prepend="," property="orderByResourceId" >
+        RESOURCE_ID $orderByResourceId$
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="," property="orderByRrsourceName" >
+        RRSOURCE_NAME $orderByRrsourceName$
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="," property="orderByResourceUrl" >
+        RESOURCE_URL $orderByResourceUrl$
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="," property="orderByStatus" >
+        STATUS $orderByStatus$
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="," property="orderByPriority" >
+        PRIORITY $orderByPriority$
+      </isPropertyAvailable>
+    </dynamic>
+  </sql>
+
+  <select id="selectByExample" resultMap="baseResultMap" parameterClass="java.util.Map" >
+    select RESOURCE_ID, RRSOURCE_NAME, RESOURCE_URL, STATUS, PRIORITY
+    from resource
+    <isParameterPresent >
+      <include refid="queryConditions" />
+    </isParameterPresent>
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="baseResultMap" parameterClass="Resource" >
+    select RESOURCE_ID, RRSOURCE_NAME, RESOURCE_URL, STATUS, PRIORITY
+    from resource
+    where RESOURCE_ID = #resourceId:VARCHAR#
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterClass="Resource" >
+    delete from resource
+    where RESOURCE_ID = #resourceId:VARCHAR#
+  </delete>
+
+  <delete id="deleteByExample" parameterClass="java.util.Map" >
+    delete from resource
+    <include refid="queryConditions" />
+  </delete>
+
+  <insert id="insert" parameterClass="Resource" >
+    insert into resource (RESOURCE_ID, RRSOURCE_NAME, RESOURCE_URL, STATUS, PRIORITY)
+    values (#resourceId:VARCHAR#, #rrsourceName:VARCHAR#, #resourceUrl:VARCHAR#, #status:SMALLINT#,
+      #priority:INTEGER#)
+  </insert>
+
+  <insert id="insertSelective" parameterClass="Resource" >
+    insert into resource
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="resourceId" >
+        RESOURCE_ID
+      </isNotNull>
+      <isNotNull prepend="," property="rrsourceName" >
+        RRSOURCE_NAME
+      </isNotNull>
+      <isNotNull prepend="," property="resourceUrl" >
+        RESOURCE_URL
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        STATUS
+      </isNotNull>
+      <isNotNull prepend="," property="priority" >
+        PRIORITY
+      </isNotNull>
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="resourceId" >
+        #resourceId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="rrsourceName" >
+        #rrsourceName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="resourceUrl" >
+        #resourceUrl:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        #status:SMALLINT#
+      </isNotNull>
+      <isNotNull prepend="," property="priority" >
+        #priority:INTEGER#
+      </isNotNull>
+      )
+    </dynamic>
+  </insert>
+
+  <select id="countByExample" parameterClass="java.util.Map" resultClass="java.lang.Integer" >
+    select count(*) from resource
+    <include refid="queryConditions" />
+  </select>
+
+  <update id="updateByExampleSelective" parameterClass="java.util.Map" >
+    update resource
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="resourceId" >
+        RESOURCE_ID = #resourceId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="rrsourceName" >
+        RRSOURCE_NAME = #rrsourceName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="resourceUrl" >
+        RESOURCE_URL = #resourceUrl:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        STATUS = #status:SMALLINT#
+      </isNotNull>
+      <isNotNull prepend="," property="priority" >
+        PRIORITY = #priority:INTEGER#
+      </isNotNull>
+    </dynamic>
+    <isParameterPresent >
+      <include refid="queryConditions" />
+    </isParameterPresent>
+  </update>
+
+  <update id="updateByExample" parameterClass="java.util.Map" >
+    update resource
+    set RESOURCE_ID = #resourceId:VARCHAR#,
+      RRSOURCE_NAME = #rrsourceName:VARCHAR#,
+      RESOURCE_URL = #resourceUrl:VARCHAR#,
+      STATUS = #status:SMALLINT#,
+      PRIORITY = #priority:INTEGER#
+    <isParameterPresent >
+      <include refid="queryConditions" />
+    </isParameterPresent>
+  </update>
+
+  <update id="updateByPrimaryKeySelective" parameterClass="Resource" >
+    update resource
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="rrsourceName" >
+        RRSOURCE_NAME = #rrsourceName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="resourceUrl" >
+        RESOURCE_URL = #resourceUrl:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        STATUS = #status:SMALLINT#
+      </isNotNull>
+      <isNotNull prepend="," property="priority" >
+        PRIORITY = #priority:INTEGER#
+      </isNotNull>
+    </dynamic>
+    where RESOURCE_ID = #resourceId:VARCHAR#
+  </update>
+
+  <update id="updateByPrimaryKey" parameterClass="Resource" >
+    update resource
+    set RRSOURCE_NAME = #rrsourceName:VARCHAR#,
+      RESOURCE_URL = #resourceUrl:VARCHAR#,
+      STATUS = #status:SMALLINT#,
+      PRIORITY = #priority:INTEGER#
+    where RESOURCE_ID = #resourceId:VARCHAR#
+  </update>
+</sqlMap>

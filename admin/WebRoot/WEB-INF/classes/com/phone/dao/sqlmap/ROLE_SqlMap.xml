@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="com.phone.entity.Role" >
+
+  <typeAlias alias="Role" type="com.phone.entity.Role" />
+
+  <resultMap id="baseResultMap" class="Role" >
+    <result column="ROLE_ID" property="roleId" jdbcType="VARCHAR" />
+    <result column="ROLE_NAME" property="roleName" jdbcType="VARCHAR" />
+    <result column="ROLE_DESC" property="roleDesc" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="SMALLINT" />
+  </resultMap>
+
+  <sql id="queryConditions" >
+    <dynamic prepend="where" >
+      <isPropertyAvailable prepend="and" property="roleId" >
+        ROLE_ID = #roleId:VARCHAR#
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="roleIdList">
+				ROLE_ID in
+				<iterate property="roleIdList" conjunction="," close=")" open="(">
+						#roleIdList[]#
+				</iterate>
+	  </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="roleId_like" >
+        ROLE_ID like '%'|| #roleId_like:VARCHAR#||'%'
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="roleName" >
+        ROLE_NAME = #roleName:VARCHAR#
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="roleName_like" >
+        ROLE_NAME like '%'|| #roleName_like:VARCHAR#||'%'
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="roleDesc" >
+        ROLE_DESC = #roleDesc:VARCHAR#
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="roleDesc_like" >
+        ROLE_DESC like '%'|| #roleDesc_like:VARCHAR#||'%'
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="status" >
+        STATUS = #status:SMALLINT#
+      </isPropertyAvailable>
+    </dynamic>
+    <dynamic prepend="order by" >
+      <isPropertyAvailable prepend="," property="orderByRoleId" >
+        ROLE_ID $orderByRoleId$
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="," property="orderByRoleName" >
+        ROLE_NAME $orderByRoleName$
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="," property="orderByRoleDesc" >
+        ROLE_DESC $orderByRoleDesc$
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="," property="orderByStatus" >
+        STATUS $orderByStatus$
+      </isPropertyAvailable>
+    </dynamic>
+  </sql>
+
+  <select id="selectByExample" resultMap="baseResultMap" parameterClass="java.util.Map" >
+    select ROLE_ID, ROLE_NAME, ROLE_DESC, STATUS
+    from role
+    <isParameterPresent >
+      <include refid="queryConditions" />
+    </isParameterPresent>
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="baseResultMap" parameterClass="Role" >
+    select ROLE_ID, ROLE_NAME, ROLE_DESC, STATUS
+    from role
+    where ROLE_ID = #roleId:VARCHAR#
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterClass="Role" >
+    delete from role
+    where ROLE_ID = #roleId:VARCHAR#
+  </delete>
+
+  <delete id="deleteByExample" parameterClass="java.util.Map" >
+    delete from role
+    <include refid="queryConditions" />
+  </delete>
+
+  <insert id="insert" parameterClass="Role" >
+    insert into role (ROLE_ID, ROLE_NAME, ROLE_DESC, STATUS)
+    values (#roleId:VARCHAR#, #roleName:VARCHAR#, #roleDesc:VARCHAR#, #status:SMALLINT#)
+  </insert>
+
+  <insert id="insertSelective" parameterClass="Role" >
+    insert into role
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="roleId" >
+        ROLE_ID
+      </isNotNull>
+      <isNotNull prepend="," property="roleName" >
+        ROLE_NAME
+      </isNotNull>
+      <isNotNull prepend="," property="roleDesc" >
+        ROLE_DESC
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        STATUS
+      </isNotNull>
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="roleId" >
+        #roleId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="roleName" >
+        #roleName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="roleDesc" >
+        #roleDesc:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        #status:SMALLINT#
+      </isNotNull>
+      )
+    </dynamic>
+  </insert>
+
+  <select id="countByExample" parameterClass="java.util.Map" resultClass="java.lang.Integer" >
+    select count(*) from role
+    <include refid="queryConditions" />
+  </select>
+
+  <update id="updateByExampleSelective" parameterClass="java.util.Map" >
+    update role
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="roleId" >
+        ROLE_ID = #roleId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="roleName" >
+        ROLE_NAME = #roleName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="roleDesc" >
+        ROLE_DESC = #roleDesc:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        STATUS = #status:SMALLINT#
+      </isNotNull>
+    </dynamic>
+    <isParameterPresent >
+      <include refid="queryConditions" />
+    </isParameterPresent>
+  </update>
+
+  <update id="updateByExample" parameterClass="java.util.Map" >
+    update role
+    set ROLE_ID = #roleId:VARCHAR#,
+      ROLE_NAME = #roleName:VARCHAR#,
+      ROLE_DESC = #roleDesc:VARCHAR#,
+      STATUS = #status:SMALLINT#
+    <isParameterPresent >
+      <include refid="queryConditions" />
+    </isParameterPresent>
+  </update>
+
+  <update id="updateByPrimaryKeySelective" parameterClass="Role" >
+    update role
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="roleName" >
+        ROLE_NAME = #roleName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="roleDesc" >
+        ROLE_DESC = #roleDesc:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        STATUS = #status:SMALLINT#
+      </isNotNull>
+    </dynamic>
+    where ROLE_ID = #roleId:VARCHAR#
+  </update>
+
+  <update id="updateByPrimaryKey" parameterClass="Role" >
+    update role
+    set ROLE_NAME = #roleName:VARCHAR#,
+      ROLE_DESC = #roleDesc:VARCHAR#,
+      STATUS = #status:SMALLINT#
+    where ROLE_ID = #roleId:VARCHAR#
+  </update>
+</sqlMap>

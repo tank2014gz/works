@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="com.phone.entity.RequestLog" >
+
+  <typeAlias alias="RequestLog" type="com.phone.entity.RequestLog" />
+
+  <resultMap id="baseResultMap" class="RequestLog" >
+    <result column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="REQUEST_CLASS" property="requestClass" jdbcType="VARCHAR" />
+    <result column="REQUEST_METHOD" property="requestMethod" jdbcType="VARCHAR" />
+    <result column="REQUEST_ARGS" property="requestArgs" jdbcType="VARCHAR" />
+    <result column="DEAL_TIME" property="dealTime" jdbcType="BIGINT" />
+    <result column="REQUEST_TIME" property="requestTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <sql id="queryConditions" >
+    <dynamic prepend="where" >
+      <isPropertyAvailable prepend="and" property="id" >
+        ID = #id:VARCHAR#
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="id_like" >
+        ID like '%'|| #id_like:VARCHAR#||'%'
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="requestClass" >
+        REQUEST_CLASS = #requestClass:VARCHAR#
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="requestClass_like" >
+        REQUEST_CLASS like '%'|| #requestClass_like:VARCHAR#||'%'
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="requestMethod" >
+        REQUEST_METHOD = #requestMethod:VARCHAR#
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="requestMethod_like" >
+        REQUEST_METHOD like '%'|| #requestMethod_like:VARCHAR#||'%'
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="requestArgs" >
+        REQUEST_ARGS = #requestArgs:VARCHAR#
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="requestArgs_like" >
+        REQUEST_ARGS like '%'|| #requestArgs_like:VARCHAR#||'%'
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="dealTime" >
+        DEAL_TIME = #dealTime:BIGINT#
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="and" property="requestTime" >
+        REQUEST_TIME = #requestTime:TIMESTAMP#
+      </isPropertyAvailable>
+    </dynamic>
+    <dynamic prepend="order by" >
+      <isPropertyAvailable prepend="," property="orderById" >
+        ID $orderById$
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="," property="orderByRequestClass" >
+        REQUEST_CLASS $orderByRequestClass$
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="," property="orderByRequestMethod" >
+        REQUEST_METHOD $orderByRequestMethod$
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="," property="orderByRequestArgs" >
+        REQUEST_ARGS $orderByRequestArgs$
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="," property="orderByDealTime" >
+        DEAL_TIME $orderByDealTime$
+      </isPropertyAvailable>
+      <isPropertyAvailable prepend="," property="orderByRequestTime" >
+        REQUEST_TIME $orderByRequestTime$
+      </isPropertyAvailable>
+    </dynamic>
+  </sql>
+
+  <select id="selectByExample" resultMap="baseResultMap" parameterClass="java.util.Map" >
+    select ID, REQUEST_CLASS, REQUEST_METHOD, REQUEST_ARGS, DEAL_TIME, REQUEST_TIME
+    from request_log
+    <isParameterPresent >
+      <include refid="queryConditions" />
+    </isParameterPresent>
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="baseResultMap" parameterClass="RequestLog" >
+    select ID, REQUEST_CLASS, REQUEST_METHOD, REQUEST_ARGS, DEAL_TIME, REQUEST_TIME
+    from request_log
+    where ID = #id:VARCHAR#
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterClass="RequestLog" >
+    delete from request_log
+    where ID = #id:VARCHAR#
+  </delete>
+
+  <delete id="deleteByExample" parameterClass="java.util.Map" >
+    delete from request_log
+    <include refid="queryConditions" />
+  </delete>
+
+  <insert id="insert" parameterClass="RequestLog" >
+    insert into request_log (ID, REQUEST_CLASS, REQUEST_METHOD, REQUEST_ARGS, DEAL_TIME,
+      REQUEST_TIME)
+    values (#id:VARCHAR#, #requestClass:VARCHAR#, #requestMethod:VARCHAR#, #requestArgs:VARCHAR#,
+      #dealTime:BIGINT#, #requestTime:TIMESTAMP#)
+  </insert>
+
+  <insert id="insertSelective" parameterClass="RequestLog" >
+    insert into request_log
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        ID
+      </isNotNull>
+      <isNotNull prepend="," property="requestClass" >
+        REQUEST_CLASS
+      </isNotNull>
+      <isNotNull prepend="," property="requestMethod" >
+        REQUEST_METHOD
+      </isNotNull>
+      <isNotNull prepend="," property="requestArgs" >
+        REQUEST_ARGS
+      </isNotNull>
+      <isNotNull prepend="," property="dealTime" >
+        DEAL_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="requestTime" >
+        REQUEST_TIME
+      </isNotNull>
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        #id:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="requestClass" >
+        #requestClass:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="requestMethod" >
+        #requestMethod:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="requestArgs" >
+        #requestArgs:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="dealTime" >
+        #dealTime:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="requestTime" >
+        #requestTime:TIMESTAMP#
+      </isNotNull>
+      )
+    </dynamic>
+  </insert>
+
+  <select id="countByExample" parameterClass="java.util.Map" resultClass="java.lang.Integer" >
+    select count(*) from request_log
+    <include refid="queryConditions" />
+  </select>
+
+  <update id="updateByExampleSelective" parameterClass="java.util.Map" >
+    update request_log
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="id" >
+        ID = #id:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="requestClass" >
+        REQUEST_CLASS = #requestClass:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="requestMethod" >
+        REQUEST_METHOD = #requestMethod:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="requestArgs" >
+        REQUEST_ARGS = #requestArgs:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="dealTime" >
+        DEAL_TIME = #dealTime:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="requestTime" >
+        REQUEST_TIME = #requestTime:TIMESTAMP#
+      </isNotNull>
+    </dynamic>
+    <isParameterPresent >
+      <include refid="queryConditions" />
+    </isParameterPresent>
+  </update>
+
+  <update id="updateByExample" parameterClass="java.util.Map" >
+    update request_log
+    set ID = #id:VARCHAR#,
+      REQUEST_CLASS = #requestClass:VARCHAR#,
+      REQUEST_METHOD = #requestMethod:VARCHAR#,
+      REQUEST_ARGS = #requestArgs:VARCHAR#,
+      DEAL_TIME = #dealTime:BIGINT#,
+      REQUEST_TIME = #requestTime:TIMESTAMP#
+    <isParameterPresent >
+      <include refid="queryConditions" />
+    </isParameterPresent>
+  </update>
+
+  <update id="updateByPrimaryKeySelective" parameterClass="RequestLog" >
+    update request_log
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="requestClass" >
+        REQUEST_CLASS = #requestClass:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="requestMethod" >
+        REQUEST_METHOD = #requestMethod:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="requestArgs" >
+        REQUEST_ARGS = #requestArgs:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="dealTime" >
+        DEAL_TIME = #dealTime:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="requestTime" >
+        REQUEST_TIME = #requestTime:TIMESTAMP#
+      </isNotNull>
+    </dynamic>
+    where ID = #id:VARCHAR#
+  </update>
+
+  <update id="updateByPrimaryKey" parameterClass="RequestLog" >
+    update request_log
+    set REQUEST_CLASS = #requestClass:VARCHAR#,
+      REQUEST_METHOD = #requestMethod:VARCHAR#,
+      REQUEST_ARGS = #requestArgs:VARCHAR#,
+      DEAL_TIME = #dealTime:BIGINT#,
+      REQUEST_TIME = #requestTime:TIMESTAMP#
+    where ID = #id:VARCHAR#
+  </update>
+</sqlMap>
